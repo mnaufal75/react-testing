@@ -1,22 +1,51 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import IconButton from 'material-ui/IconButton';
+import DeleteIcon from 'material-ui-icons/Delete';
+import { withStyles } from 'material-ui/styles';
+
+const styles = theme => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+});
 
 class ProjectItem extends Component {
-	deleteProject(id) {
-		this.props.onDelete(id);
-	}
+  constructor() {
+    super();
+
+    this.deleteProject = this.deleteProject.bind(this);
+  }
+
+  deleteProject(id) {
+    this.props.onDelete(id);
+  }
 
   render() {
+    const { classes } = this.props;
+
     return (
       <li className="Project">
-        <strong>{this.props.project.title}</strong> - {this.props.project.category} <a href="#" onClick={this.deleteProject.bind(this, this.props.project.id)}>X</a>
+        <strong>{this.props.project.title}</strong> - {this.props.project.category}
+        <IconButton className={classes.button} aria-label="Delete" onClick={this.deleteProject}>
+          <DeleteIcon />
+        </IconButton>
       </li>
     );
   }
 }
 
-// ProjectItem.propTypes = {
-// 	project: React.PropTypes.object,
-// 	onDelete: React.PropTypes.func,
-// }
+ProjectItem.defaultProps = {
+  project: [],
+  onDelete: [],
+};
 
-export default ProjectItem;
+ProjectItem.propTypes = {
+  project: PropTypes.shape(({
+    title: PropTypes.string,
+    category: PropTypes.string,
+  })),
+  onDelete: PropTypes.func,
+};
+
+export default withStyles(styles)(ProjectItem);
